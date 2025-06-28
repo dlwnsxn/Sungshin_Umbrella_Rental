@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성신고등학교 양심우산 자율 대여 사이트</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: #13264E;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            background: #f8f9fa;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: #13264E;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #13264E;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(19, 38, 78, 0.1);
+        }
+
+        .checkbox-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e1e8ed;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .checkbox-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 12px;
+            margin-top: 4px;
+            transform: scale(1.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #13264E 0%, #1e3a72 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(19, 38, 78, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(19, 38, 78, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .status-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .status-number {
+            font-size: 3em;
+            font-weight: 700;
+            color: #13264E;
+            margin-bottom: 10px;
+        }
+
+        .status-label {
+            font-size: 1.3em;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .rental-list {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .rental-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .rental-item:hover {
+            background: #f8f9fa;
+        }
+
+        .rental-item:last-child {
+            border-bottom: none;
+        }
+
+        .rental-info {
+            flex: 1;
+        }
+
+        .rental-name {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .rental-details {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .rental-date {
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .rental-date.normal {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .rental-date.overdue {
+            background: #f8d7da;
+            color: #721c24;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .admin-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .admin-controls input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #13264E;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: #13264E;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .real-time-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            z-index: 1000;
+            animation: realTimePulse 3s infinite;
+        }
+
+        @keyframes realTimePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .real-time-indicator::before {
+            content: "●";
+            margin-right: 5px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .rental-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .admin-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="real-time-indicator">실시간 연동</div>
+    
+    <header class="header">
+        <h1>성신고등학교 양심우산 자율 대여 사이트</h1>
+        <p>비 오는 날, 따뜻한 마음을 나누어요 ☔</p>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('rental')">우산 대여하기</button>
+            <button class="tab" onclick="showTab('return')">우산 반납하기</button>
+            <button class="tab" onclick="showTab('status')">재고 현황</button>
+            <button class="tab" onclick="showTab('admin')">관리자</button>
+        </div>
+
+        <!-- 우산 대여하기 탭 -->
+        <div class="tab-content active" id="rental">
+            <div class="card">
+                <h3>🌂 우산 대여 신청</h3>
+                <form id="rentalForm">
+                    <div class="form-group">
+                        <label for="studentId">학번</label>
+                        <input type="text" id="studentId" placeholder="예: 10101" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentName">이름</label>
+                        <input type="text" id="studentName" placeholder="홍길동" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">전화번호</label>
+                        <input type="tel" id="phoneNumber" placeholder="예: 010-1234-5678" required>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="returnRule" required>
+                            <label for="returnRule">다음날까지 반드시 반납하겠습니다.</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="compensationRule" required>
+                            <label for="compensationRule">우산을 분실, 파손하거나 연체할 경우 그에 따른 보상을 하겠습니다.</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn">우산 대여하기</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 우산 반납하기 탭 -->
+        <div class="tab-content" id="return">
+            <div class="card">
+                <h3>🔄 우산 반납하기</h3>
+                <form id="returnForm">
+                    <div class="form-group">
+                        <label for="returnStudentId">학번</label>
+                        <input type="text" id="returnStudentId" placeholder="예: 10101" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="returnStudentName">이름</label>
+                        <input type="text" id="returnStudentName" placeholder="홍길동" required>
+                    </div>
+                    <button type="submit" class="btn">우산 반납하기</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 재고 현황 탭 -->
+        <div class="tab-content" id="status">
+            <div class="status-card">
+                <div class="status-number" id="availableCount">0</div>
+                <div class="status-label">대여 가능한 우산</div>
+            </div>
+        </div>
+
+        <!-- 관리자 탭 -->
+        <div class="tab-content" id="admin">
+            <div class="card">
+                <h3>🔐 관리자 로그인</h3>
+                <div id="adminLogin">
+                    <div class="form-group">
+                        <label for="adminPassword">관리자 비밀번호</label>
+                        <input type="password" id="adminPassword" placeholder="비밀번호를 입력하세요">
+                    </div>
+                    <button onclick="adminLogin()" class="btn">로그인</button>
+                </div>
+
+                <div id="adminPanel" style="display: none;">
+                    <div class="admin-controls">
+                        <input type="number" id="umbrellaCount" placeholder="우산 총 개수" min="0">
+                        <button onclick="updateUmbrellaCount()" class="btn">개수 업데이트</button>
+                        <input type="password" id="newPassword" placeholder="새 비밀번호">
+                        <button onclick="changePassword()" class="btn">비밀번호 변경</button>
+                        <button onclick="adminLogout()" class="btn btn-danger">로그아웃</button>
+                    </div>
+
+                    <div class="grid">
+                        <div class="status-card">
+                            <div class="status-number" id="totalUmbrellas">10</div>
+                            <div class="status-label">총 우산 개수</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-number" id="rentedCount">0</div>
+                            <div class="status-label">대여 중인 우산</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 대여 현황</h3>
+                        <div id="rentalHistory" class="rental-list">
+                            <p style="text-align: center; color: #666; padding: 40px;">대여 중인 우산이 없습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // 실시간 데이터 저장소 (실제 환경에서는 Firebase나 다른 실시간 DB 사용)
+        class RealTimeDatabase {
+            constructor() {
+                this.data = this.loadData();
+                this.listeners = [];
+                this.simulateRealTimeSync();
+            }
+
+            loadData() {
+                const saved = localStorage.getItem('umbrellaData');
+                if (saved) {
+                    return JSON.parse(saved);
+                }
+                return {
+                    totalUmbrellas: 10,
+                    adminPassword: 'admin123',
+                    rentals: []
+                };
+            }
+
+            saveData() {
+                localStorage.setItem('umbrellaData', JSON.stringify(this.data));
+                this.notifyListeners();
+            }
+
+            addListener(callback) {
+                this.listeners.push(callback);
+            }
+
+            notifyListeners() {
+                this.listeners.forEach(callback => callback(this.data));
+            }
+
+            // 실시간 동기화 시뮬레이션
+            simulateRealTimeSync() {
+                setInterval(() => {
+                    // 실제로는 서버와 WebSocket 또는 Server-Sent Events로 동기화
+                    const currentData = this.loadData();
+                    if (JSON.stringify(currentData) !== JSON.stringify(this.data)) {
+                        this.data = currentData;
+                        this.notifyListeners();
+                    }
+                }, 1000);
+            }
+
+            addRental(rental) {
+                this.data.rentals.push({
+                    ...rental,
+                    id: Date.now(),
+                    rentalDate: new Date().toISOString()
+                });
+                this.saveData();
+            }
+
+            removeRental(studentId, studentName) {
+                const index = this.data.rentals.findIndex(r => 
+                    r.studentId === studentId && r.studentName === studentName
+                );
+                if (index !== -1) {
+                    this.data.rentals.splice(index, 1);
+                    this.saveData();
+                    return true;
+                }
+                return false;
+            }
+
+            updateTotalUmbrellas(count) {
+                this.data.totalUmbrellas = count;
+                this.saveData();
+            }
+
+            changePassword(newPassword) {
+                this.data.adminPassword = newPassword;
+                this.saveData();
+            }
+        }
+
+        const db = new RealTimeDatabase();
+        let isAdminLoggedIn = false;
+
+        // 실시간 업데이트 리스너
+        db.addListener((data) => {
+            updateUI(data);
+        });
+
+        function updateUI(data) {
+            const availableCount = data.totalUmbrellas - data.rentals.length;
+            document.getElementById('availableCount').textContent = availableCount;
+            document.getElementById('totalUmbrellas').textContent = data.totalUmbrellas;
+            document.getElementById('rentedCount').textContent = data.rentals.length;
+            
+            if (isAdminLoggedIn) {
+                updateRentalHistory(data.rentals);
+            }
+        }
+
+        function showTab(tabName) {
+            // 모든 탭 비활성화
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // 선택된 탭 활성화
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            // 초기 데이터 로드
+            updateUI(db.data);
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification show ${type}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // 우산 대여
+        document.getElementById('rentalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentId = document.getElementById('studentId').value.trim();
+            const studentName = document.getElementById('studentName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const returnRule = document.getElementById('returnRule').checked;
+            const compensationRule = document.getElementById('compensationRule').checked;
+            
+            if (!returnRule || !compensationRule) {
+                showNotification('모든 약관에 동의해주세요.', 'error');
+                return;
+            }
+            
+            if (db.data.rentals.length >= db.data.totalUmbrellas) {
+                showNotification('대여 가능한 우산이 없습니다.', 'error');
+                return;
+            }
+            
+            // 중복 대여 확인
+            const existingRental = db.data.rentals.find(r => r.studentId === studentId);
+            if (existingRental) {
+                showNotification('이미 우산을 대여 중입니다.', 'error');
+                return;
+            }
+            
+            db.addRental({
+                studentId,
+                studentName,
+                phoneNumber
+            });
+            
+            showNotification(`${studentName}님, 우산 대여가 완료되었습니다!`);
+            this.reset();
+        });
+
+        // 우산 반납
+        document.getElementById('returnForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentId = document.getElementById('returnStudentId').value.trim();
+            const studentName = document.getElementById('returnStudentName').value.trim();
+            
+            if (db.removeRental(studentId, studentName)) {
+                showNotification(`${studentName}님, 우산 반납이 완료되었습니다!`);
+                this.reset();
+            } else {
+                showNotification('학번과 이름이 일치하는 대여 기록을 찾을 수 없습니다.', 'error');
+            }
+        });
+
+        // 관리자 로그인
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === db.data.adminPassword) {
+                isAdminLoggedIn = true;
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                document.getElementById('umbrellaCount').value = db.data.totalUmbrellas;
+                updateRentalHistory(db.data.rentals);
+                showNotification('관리자 로그인 완료');
+            } else {
+                showNotification('비밀번호가 틀렸습니다.', 'error');
+            }
+        }
+
+        function adminLogout() {
+            isAdminLoggedIn = false;
+            document.getElementById('adminLogin').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            showNotification('로그아웃 되었습니다.');
+        }
+
+        function updateUmbrellaCount() {
+            const count = parseInt(document.getElementById('umbrellaCount').value);
+            if (count >= 0) {
+                db.updateTotalUmbrellas(count);
+                showNotification('우산 개수가 업데이트 되었습니다.');
+            }
+        }
+
+        function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            if (newPassword.length >= 4) {
+                db.changePassword(newPassword);
+                document.getElementById('newPassword').value = '';
+                showNotification('비밀번호가 변경되었습니다.');
+            } else {
+                showNotification('비밀번호는 4자 이상이어야 합니다.', 'error');
+            }
+        }
+
+        function updateRentalHistory(rentals) {
+            const historyDiv = document.getElementById('rentalHistory');
+            
+            if (rentals.length === 0) {
+                historyDiv.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">대여 중인 우산이 없습니다.</p>';
+                return;
+            }
+            
+            const now = new Date();
+            let html = '';
+            
+            rentals.forEach(rental => {
+                const rentalDate = new Date(rental.rentalDate);
+                const nextDay = new Date(rentalDate);
+                nextDay.setDate(nextDay.getDate() + 1);
+                
+                const isOverdue = now > nextDay;
+                const dateClass = isOverdue ? 'overdue' : 'normal';
+                const dateText = isOverdue ? '연체됨' : '정상';
+                
+                html += `
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">${rental.studentName} (${rental.studentId})</div>
+                            <div class="rental-details">전화번호: ${rental.phoneNumber}</div>
+                            <div class="rental-details">대여일시: ${rentalDate.toLocaleString('ko-KR')}</div>
+                        </div>
+                        <div class="rental-date ${dateClass}">${dateText}</div>
+                    </div>
+                `;
+            });
+            
+            historyDiv.innerHTML = html;
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUI(db.data);
+        });
+    </script>
+</body>
+</html>
